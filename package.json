@@ -1,0 +1,21 @@
+{
+  "name": "location-kit",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Shared location toolkit — generic user address book, geocoding (Mapbox adapter), and (roadmap) the geo math every app duplicates: haversine distance, delivery-radius checks. Storage-agnostic via store seams.",
+  "license": "UNLICENSED",
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "setup": "npm install -w @locationkit/addresses && npm run build",
+    "build": "npm run build -w @locationkit/addresses",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "test": "vitest run"
+  },
+  "devDependencies": {
+    "@types/node": "^22.20.1",
+    "typescript": "^5.7.2",
+    "vitest": "^3.2.0"
+  }
+}
