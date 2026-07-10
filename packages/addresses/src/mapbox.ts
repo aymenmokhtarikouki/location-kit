@@ -37,6 +37,7 @@ function extractParts(feature: MapboxFeature): GeocodeResult['parts'] {
   for (const ctx of feature.context ?? []) {
     if (ctx.id.startsWith('postcode')) parts.postalCode = ctx.text
     else if (ctx.id.startsWith('place')) parts.city = ctx.text
+    else if ((ctx.id.startsWith('locality') || ctx.id.startsWith('region')) && !parts.city) parts.city = ctx.text
     else if (ctx.id.startsWith('country')) {
       parts.country = ctx.text
       if (ctx.short_code) parts.countryCode = ctx.short_code.toUpperCase()
