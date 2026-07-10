@@ -15,6 +15,8 @@ export interface MapboxGeocoderOptions {
   types?: string
   /** Default result cap for autocomplete. Default 5. */
   limit?: number
+  /** Queries shorter than this return [] without calling Mapbox. Default 3. */
+  minQueryLength?: number
   fetchImpl?: typeof fetch
 }
 
@@ -54,7 +56,7 @@ function toResult(feature: MapboxFeature): GeocodeResult {
 }
 
 export function mapboxGeocoder(options: MapboxGeocoderOptions): Geocoder {
-  const { accessToken, country, language, types = 'address', limit = 5 } = options
+  const { accessToken, country, language, types = 'address', limit = 5, minQueryLength = 3 } = options
   const doFetch = options.fetchImpl ?? fetch
 
   function buildUrl(path: string, params: Record<string, string>): string {
@@ -74,7 +76,7 @@ export function mapboxGeocoder(options: MapboxGeocoderOptions): Geocoder {
   return {
     async autocomplete(q, opts) {
       const trimmed = q.trim()
-      if (trimmed.length < 3) return []
+      if (trimmed.length < minQueryLength) return []
       const url = buildUrl(encodeURIComponent(trimmed), {
         autocomplete: 'true',
         limit: String(opts?.limit ?? limit),
