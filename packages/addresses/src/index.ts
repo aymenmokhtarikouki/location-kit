@@ -1,5 +1,5 @@
 /**
- * @authkit/addresses — generic address book + geocoding seam.
+ * @aymenkits/location-addresses — generic address book + geocoding seam.
  *
  * Quick start:
  *   const addresses = createAddressService({

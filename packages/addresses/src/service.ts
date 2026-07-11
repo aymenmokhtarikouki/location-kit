@@ -3,7 +3,7 @@
  * first address becomes default, setting a default flips the others off,
  * deleting the default promotes the newest remaining one, coordinates are
  * validated, and `buildExtra` lets the app enrich rows on every write
- * (e.g. compute H3 cells from lat/lng via @clustermap/core's computeCells).
+ * (e.g. compute H3 cells from lat/lng via @aymenkits/clustermap-core's computeCells).
  */
 import type { Address, AddressInput, AddressStore } from './types'
 import { AddressError } from './types'

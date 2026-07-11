@@ -1,5 +1,5 @@
 {
-  "name": "@locationkit/addresses",
+  "name": "@aymenkits/location-addresses",
   "version": "1.0.0",
   "description": "Generic user address book — CRUD with default-flipping, coordinate validation, an app-extension payload (H3 cells, placeId, …) and a Geocoder seam with a Mapbox adapter (autocomplete + reverse).",
   "license": "MIT",

@@ -8,8 +8,8 @@
     "packages/*"
   ],
   "scripts": {
-    "setup": "npm install --include-workspace-root -w @locationkit/addresses && npm run build",
-    "build": "npm run build -w @locationkit/addresses",
+    "setup": "npm install --include-workspace-root -w @aymenkits/location-addresses && npm run build",
+    "build": "npm run build -w @aymenkits/location-addresses",
     "typecheck": "npm run typecheck --workspaces --if-present",
     "test": "vitest run"
   },

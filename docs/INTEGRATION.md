@@ -3,7 +3,7 @@
 ## Install
 
 ```bash
-npm install @locationkit/addresses
+npm install @aymenkits/location-addresses
 ```
 
 ## Implement the store

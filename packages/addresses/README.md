@@ -1,11 +1,11 @@
-# @locationkit/addresses
+# @aymenkits/location-addresses
 
 Address book (CRUD + single-default flip logic) generic over your extra columns, plus a Geocoder seam with a ready Mapbox forward-geocoding adapter.
 
 ## Install
 
 ```bash
-npm install @locationkit/addresses
+npm install @aymenkits/location-addresses
 ```
 
 Installs with it: nothing else — zero dependencies.
@@ -14,7 +14,7 @@ Installs with it: nothing else — zero dependencies.
 
 - `AddressStore` — your table (lean, or enriched with e.g. precomputed H3 columns)
 - For geocoding: your Mapbox token (server-side)
-- Optional `onWrite` hook (e.g. compute H3 cells via @clustermap/core)
+- Optional `onWrite` hook (e.g. compute H3 cells via @aymenkits/clustermap-core)
 
 The package never owns tables, never imports an ORM, HTTP framework, or
 provider SDK it can take as a parameter — storage and delivery are seams your
@@ -23,7 +23,7 @@ app implements on its own stack.
 ## Quick example
 
 ```ts
-import { createAddressService, mapboxGeocoder } from '@locationkit/addresses'
+import { createAddressService, mapboxGeocoder } from '@aymenkits/location-addresses'
 
 const addresses = createAddressService({ store, onWrite })
 const geocoder = mapboxGeocoder({ token: process.env.MAPBOX_TOKEN })
@@ -31,8 +31,8 @@ const geocoder = mapboxGeocoder({ token: process.env.MAPBOX_TOKEN })
 
 ## Pairs with
 
-- `@clustermap/core` computeCells in the onWrite hook
-- `@authkit/express` guards the routes
+- `@aymenkits/clustermap-core` computeCells in the onWrite hook
+- `@aymenkits/auth-express` guards the routes
 
 Kits pair **by shape, never by import** — pass the sibling kit, your own
 service, or a stub in tests.
