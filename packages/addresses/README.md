@@ -12,7 +12,7 @@ Installs with it: nothing else — zero dependencies.
 
 ## You provide
 
-- `AddressStore` — your table (yuma keeps 9 H3 columns on it; lineo a lean one)
+- `AddressStore` — your table (lean, or enriched with e.g. precomputed H3 columns)
 - For geocoding: your Mapbox token (server-side)
 - Optional `onWrite` hook (e.g. compute H3 cells via @clustermap/core)
 
@@ -44,4 +44,4 @@ https://github.com/aymenmokhtarikouki/location-kit (`contracts/`, `docs/`).
 
 ## License
 
-UNLICENSED — published for use by the author's applications.
+MIT

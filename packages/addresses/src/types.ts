@@ -1,6 +1,6 @@
 /**
- * Generic address book. `E` is the app's extension payload — yuma stores
- * placeId/city/postal + 9 precomputed H3 cell columns there; lineo stores
+ * Generic address book. `E` is the app's extension payload — one app stores
+ * placeId/city/postal + precomputed geo columns there; another stores
  * nothing extra. The kit owns the BEHAVIOR every app reimplements (default
  * flipping, validation, geocoding); the app owns the table.
  */

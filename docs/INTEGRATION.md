@@ -1,73 +1,46 @@
-# Integration guide
+# Integrating location-kit
 
-Same submodule mechanics as clustermap-kit/auth-kit (see clustermap-kit's
-INTEGRATION.md for the general update/deploy flow).
-
-## Add + depend
+## Install
 
 ```bash
-git submodule add git@github.com:aymenmokhtarikouki/location-kit.git vendor/location-kit
-npm --prefix vendor/location-kit run setup
+npm install @locationkit/addresses
 ```
 
-```jsonc
-"dependencies": {
-  "@locationkit/addresses": "file:vendor/location-kit/packages/addresses"
-},
-"scripts": { "locationkit:setup": "npm --prefix vendor/location-kit run setup" }
-```
+## Implement the store
 
-Deploys/CI: `git submodule update --init` + `npm run locationkit:setup` BEFORE
-the consumer `npm install`.
+`AddressStore` maps onto your addresses table. The kit owns the behavior
+every app reimplements — first address auto-defaults, setting a default flips
+the previous one, deleting the default promotes the newest — your app owns
+the columns.
 
-## yuma_backend (Prisma) — AddressStore on `UserAddress`
+`E` (the extension payload) is where app-specific columns live; populate
+them in `buildExtra`, which runs on create and whenever coordinates change:
 
 ```ts
-import { computeCells } from '@clustermap/core'
-
-const store: AddressStore<YumaExtra> = {
-  listByUser: (userId) => prisma.userAddress.findMany({ where: { userId } }).then(rowsToAddresses),
-  findById: (userId, id) => prisma.userAddress.findFirst({ where: { id, userId } }).then(rowToAddress),
-  create: (userId, d) => prisma.userAddress.create({
-    data: { userId, label: d.label, line1: d.line, lat: d.lat, lng: d.lng,
-            isDefault: d.isDefault, ...d.extra },          // extra spreads cellR4..R12, placeId…
-  }).then(rowToAddress),
-  update: (userId, id, d) => prisma.userAddress.update({ where: { id }, data: flatten(d) }).then(rowToAddress),
-  delete: (userId, id) => prisma.userAddress.delete({ where: { id } }).then(() => {}),
-  clearDefault: (userId) =>
-    prisma.userAddress.updateMany({ where: { userId }, data: { isDefault: false } }).then(() => {}),
-}
-
-const addresses = createAddressService<YumaExtra>({
+const addresses = createAddressService<MyExtra>({
   store,
-  hooks: { buildExtra: (i) => ({ ...computeCells(i.lat, i.lng) }) }, // keeps map clustering fed
+  buildExtra: ({ lat, lng }) => ({ cells: computeCells(lat, lng) }), // optional
 })
 ```
 
-## lineo-backend (pg) — AddressStore on `customer_addresses`
+## Geocoding
 
-```ts
-const store: AddressStore = {
-  listByUser: async (userId) =>
-    (await pool.query(`SELECT * FROM customer_addresses WHERE user_id=$1`, [userId])).rows.map(rowToAddress),
-  create: async (userId, d) =>
-    rowToAddress((await pool.query(
-      `INSERT INTO customer_addresses (user_id, label, address, lat, lng, is_default)
-       VALUES ($1,$2,$3,$4,$5,$6) RETURNING *`,
-      [userId, d.label, d.line, d.lat, d.lng, d.isDefault],
-    )).rows[0]),
-  clearDefault: (userId) =>
-    pool.query(`UPDATE customer_addresses SET is_default=false WHERE user_id=$1`, [userId]).then(() => {}),
-  // findById / update / delete analogous — always filter by user_id.
-}
-```
+`mapboxGeocoder({ token })` gives you server-side autocomplete + reverse
+geocoding with pre-split address parts. Keep the token server-side; expose
+your own thin proxy route.
 
-## Geocoding route (replaces the duplicated proxy modules)
+## Migrating from an existing implementation
 
-```ts
-const geocoder = mapboxGeocoder({ accessToken: env.MAPBOX_ACCESS_TOKEN, country: 'de', language: 'de' })
-router.get('/geocoding/autocomplete', async (req, res) =>
-  res.json(createApiResponse(await geocoder.autocomplete(String(req.query.q ?? '')))))
-router.get('/geocoding/reverse', async (req, res) =>
-  res.json(createApiResponse(await geocoder.reverse(Number(req.query.lat), Number(req.query.lng)))))
-```
+The kits were extracted from production systems, and these rules kept those
+migrations safe:
+
+1. **Never rewrite a working flow in one step.** Keep your endpoint URLs,
+   response envelopes and (for realtime) socket event names byte-identical;
+   swap the implementation underneath, one endpoint at a time.
+2. **Data stays put.** The store seams map onto your existing tables — new
+   capabilities need at most additive columns, never a data migration.
+3. **Delete the superseded code in the same change.** Two implementations of
+   the same behavior is how drift starts.
+4. Where the kit enforces domain rules through policy hooks, your hooks may
+   THROW your app's own error types — the kit re-throws them untouched, so
+   your API's error contract survives the swap.

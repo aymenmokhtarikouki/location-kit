@@ -2,11 +2,12 @@
   "name": "@locationkit/addresses",
   "version": "1.0.0",
   "description": "Generic user address book — CRUD with default-flipping, coordinate validation, an app-extension payload (H3 cells, placeId, …) and a Geocoder seam with a Mapbox adapter (autocomplete + reverse).",
-  "license": "UNLICENSED",
+  "license": "MIT",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
-    "dist"
+    "dist",
+    "LICENSE"
   ],
   "scripts": {
     "build": "tsc -p tsconfig.json",
@@ -19,5 +20,21 @@
     "type": "git",
     "url": "git+https://github.com/aymenmokhtarikouki/location-kit.git",
     "directory": "packages/addresses"
-  }
+  },
+  "keywords": [
+    "address",
+    "geocoding",
+    "mapbox",
+    "address-book",
+    "addresses"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "sideEffects": false,
+  "homepage": "https://github.com/aymenmokhtarikouki/location-kit#readme",
+  "bugs": {
+    "url": "https://github.com/aymenmokhtarikouki/location-kit/issues"
+  },
+  "author": "Aymen Mokhtari"
 }

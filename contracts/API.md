@@ -1,7 +1,7 @@
 # location-kit — HTTP contract
 
 Canonical shapes for the address book + geocoding proxy. Apps may remap paths
-and wrap payloads in their envelope (yuma/lineo: `{ "data": … }`).
+and wrap payloads in their envelope (commonly `{ "data": … }`).
 
 ## Address book (authed — compose with your auth middleware)
 

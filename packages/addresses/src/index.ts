@@ -5,7 +5,7 @@
  *   const addresses = createAddressService({
  *     store: myAddressStore,           // maps to your addresses table
  *     hooks: {
- *       // yuma: keep H3 cells populated for map clustering
+ *       // e.g. keep H3 cells populated for map clustering
  *       buildExtra: (input) => ({ ...computeCells(input.lat, input.lng) }),
  *     },
  *   })

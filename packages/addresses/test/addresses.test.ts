@@ -67,7 +67,7 @@ describe('address service — validation + extras hook', () => {
     })
   })
 
-  it('buildExtra enriches rows on create and on coordinate change (yuma H3 case)', async () => {
+  it('buildExtra enriches rows on create and on coordinate change (geo-enrichment case)', async () => {
     type Extra = { cell: string }
     const svc = createAddressService<Extra>({
       store: createInMemoryAddressStore<Extra>(),

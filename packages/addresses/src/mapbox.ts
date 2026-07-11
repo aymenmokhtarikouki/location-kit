@@ -1,5 +1,5 @@
 /**
- * Mapbox Geocoding v5 adapter — the same proxy lineo built and yuma copied,
+ * Mapbox Geocoding v5 adapter — a production-proven forward-geocoding proxy,
  * extracted once. Runs SERVER-SIDE so the access token never reaches clients.
  * `fetchImpl` is injectable for tests; defaults to global fetch (Node 18+).
  */
